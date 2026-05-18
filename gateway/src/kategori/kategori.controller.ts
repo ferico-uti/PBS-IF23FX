@@ -1,9 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { KategoriService } from './kategori.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateKategoriDto } from './dto/create-kategori.dto';
 import { UpdateKategoriDto } from './dto/update-kategori.dto';
+import { KategoriService } from './kategori.service';
+import { JwtAccessGuard } from '../auth/guards/jwt-access.guard';
 
 @Controller('kategori')
+@UseGuards(JwtAccessGuard)
 export class KategoriController {
   constructor(private readonly kategoriService: KategoriService) {}
 
@@ -23,7 +34,10 @@ export class KategoriController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateKategoriDto: UpdateKategoriDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateKategoriDto: UpdateKategoriDto,
+  ) {
     return this.kategoriService.update(+id, updateKategoriDto);
   }
 
